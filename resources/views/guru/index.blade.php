@@ -27,7 +27,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Data Guru</h3>
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool">
+                                <button type="button" onclick="addForm('{{route('guru.store')}}')" class="btn btn-tool">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -51,7 +51,7 @@
                                             <td>{{ $item->jenis_kelamin}}</td>
                                             <td>{{ $item->mapel_id }}</td>
                                             <td>
-                                                <a href="#" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                                <button onclick="editData()" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
                                                 <a href="#" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
@@ -61,4 +61,19 @@
                         </div>
                     </div>
         </section> 
+        @includeIf('guru.index')
 @endsection
+
+@push
+<script>
+    function addForm(url){
+        $('#modalForm').modal('show');
+        $('modalForm .modal-title').text('Tambah Data Guru');
+    }
+
+    function editData(url){
+        $('#modalForm').modal('show');
+        $('#modalForm .modal-title').text('Edit Data Guru');
+    }
+</script>
+@endpush
