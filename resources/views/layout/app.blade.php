@@ -89,6 +89,8 @@
 
     <script src="{{asset('asset/js/adminlte.min.js?v=3.2.0') }}"></script>
 
+    @stack('script')
+
 </body>
 
 </html>

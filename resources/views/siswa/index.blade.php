@@ -1,7 +1,7 @@
 @extends ('layout.app')
 
 @section('title')
-    Guru
+    Siswa
 @endsection
 
 @section('content')
@@ -10,12 +10,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Daftar Isi Guru</h1>
+                                <h1>Daftar Isi Siswa</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Daftar Isi Guru</li>
+                                    <li class="breadcrumb-item active">Daftar Isi Siswa</li>
                                 </ol>
                             </div>
                         </div>
@@ -26,9 +26,9 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Data Guru</h3>
+                            <h3 class="card-title">Data Siswa</h3>
                             <div class="card-tools">
-                                <button type="button" onclick="addForm('{{route('guru.index')}}')" class="btn btn-tool">
+                                <button type="button" onclick="addForm('{{route('siswa.index')}}')" class="btn btn-tool">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -41,16 +41,20 @@
                                         <th>No.</th>
                                         <th>Nama</th>
                                         <th>Jenis Kelamin</th>
+                                        <th>Alamat</th>
+                                        <th>Kelas</th>
                                         <th>Mapel</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($guru as $item)
+                                    @foreach ($siswa as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->jenis_kelamin}}</td>
+                                            <td>{{ $item->jenis_kelamin }}</td>
+                                            <td>{{ $item->alamat }}</td>
+                                            <td>{{ $item->kelas_id }}</td>
                                             <td>{{ $item->mapel_id }}</td>
                                             <td>
                                                 <button onclick="editData()" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
@@ -63,19 +67,19 @@
                         </div>
                     </div>
         </section> 
-        @includeIf('guru.form')
+        @includeIf('siswa.form')
 @endsection
 
 @push('script')
 <script>
     function addForm(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Tambah Data Guru');
+        $('#modalForm .modal-title').text('Tambah Data Siswa');
     }
 
     function editData(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Edit Data Guru');
+        $('#modalForm .modal-title').text('Edit Data Siswa');
     }
 </script>
 @endpush
