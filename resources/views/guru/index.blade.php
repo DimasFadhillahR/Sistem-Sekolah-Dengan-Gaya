@@ -79,7 +79,7 @@
             $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
             .done((response) => {
                 $('#modalForm').modal('hide');
-                $('#modalForm form')[0].reset();
+                // $('#modalForm form')[0].reset();
                 table.ajax.reload();
                 // Menambahkan Alert Ketceh Dari iziToast
                 iziToast.success({
@@ -103,7 +103,7 @@
         $('#modalForm').modal('show');
         $('#modalForm .modal-title').text('Tambah Data Guru');
         // Reset Search Dengan Tidak Reload
-        $('#modalForm form')[0].reset(); 
+        // $('#modalForm form')[0].reset(); 
 
         $('#modalForm form').attr('action', url);
         $('#modalForm [name=_method]').val('post');
@@ -123,6 +123,8 @@
         $.get(url)
         .done((response) => {
             $('#modalForm [name=nama]').val(response.nama);
+            $('#modalForm [name=jenis_kelamin]').val(response.jenis_kelamin);
+            $('#modalForm [name=mapel_id]').val(response.mapel_id);
         })
         .fail((errors) => {
             alert('Tidak Dapat Menampilkan Data');

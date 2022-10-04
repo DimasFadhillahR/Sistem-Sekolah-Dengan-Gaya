@@ -14,13 +14,14 @@
                     @method('PUT')
 
                     <div class="form-group">
-                        <label for="nama">Nama Guru</label>
-                        <input type="text" autocomplete="off" class="form-control" name="nama" id="nama">
+                            <label for="nama">Nama Guru</label>
+                            <input type="text" autocomplete="off" class="form-control" name="nama" id="nama">
                     </div>
 
                     <div class="form-group">
                         <label for="jenis_kelamin">Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
+                            <option value="" class="" selected>Pilih Kelamin Dek...</option>
                              <option value="Perempuan">Perempuan</option>
                              <option value="Laki-Laki">Laki-Laki</option>
                         </select>
@@ -28,13 +29,14 @@
 
                     <div class="form-group">
                         <label for="mapel">Mapel</label>
-                        <select class="form-control" name="mapel_id" id="mapel_id">
-                        @foreach ($mapel as $item)
-                        <option value="{{$item->id}}">{{$item->nama}}</option>
+                        <select class="form-control" name="mapel_id" id="mapel_id"> 
+                            <option value="" class="" selected>Pilih Dulu Dek...</option>
+                            @foreach ($mapel as $item)
+                            <option value="{{$item->id}}">{{$item->nama}}</option>
                         @endforeach
-                    </select>    
-                </div>
-            </div>
+                        </select>
+                    </div>   
+
                     <button type="submit" class="btn btn-success btn-flat
                      btn-sm">Simpan</button>
                 </form>

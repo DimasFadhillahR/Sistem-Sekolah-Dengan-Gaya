@@ -41,6 +41,8 @@
                                         <th>Nama</th>
                                         <th>Jenis Kelamin</th>
                                         <th>Mapel</th>
+                                        <th>Kelas</th>
+                                        <th>Alamat</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -48,7 +50,7 @@
                         </div>
                     </div>
         </section> 
-        @includeIf('siswa.form')
+@includeIf('siswa.form')
 @endsection
 
 
@@ -62,13 +64,15 @@
             proccesing : true,
             autowitdh: false,
             ajax: {
-                url: '{{route('guru.data') }}'
+                url: '{{route('siswa.data') }}'
             },
             columns : [
                 {data: 'DT_RowIndex'},
                 {data: 'nama'},
                 {data: 'jenis_kelamin'},
+                {data: 'kelas_id'},
                 {data: 'mapel_id'},
+                {data: 'alamat'},
                 {data: 'aksi'}
             ]
         });
@@ -101,7 +105,7 @@
 
     function addForm(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Tambah Data Guru');
+        $('#modalForm .modal-title').text('Tambah Data Siswa');
         // Reset Search Dengan Tidak Reload
         $('#modalForm form')[0].reset(); 
 
@@ -113,7 +117,7 @@
 
     function editData(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Edit Data Guru');
+        $('#modalForm .modal-title').text('Edit Data Siswa');
 
         // Mereset Setelah Memencet Submit
         $('#modalForm form')[0].reset();
@@ -123,6 +127,10 @@
         $.get(url)
         .done((response) => {
             $('#modalForm [name=nama]').val(response.nama);
+                    $('#modalForm [name=jenis_kelamin]').val(response.jenis_kelamin);
+                    $('#modalForm [name=alamat]').val(response.alamat);
+                    $('#modalForm [name=kelas_id]').val(response.kelas_id);
+                    $('#modalForm [name=mapel_id]').val(response.mapel_id);
         })
         .fail((errors) => {
             alert('Tidak Dapat Menampilkan Data');
