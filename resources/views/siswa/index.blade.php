@@ -23,7 +23,6 @@
         </section> 
 
         <section class="content">
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Data Siswa</h3>
@@ -41,28 +40,10 @@
                                         <th>No.</th>
                                         <th>Nama</th>
                                         <th>Jenis Kelamin</th>
-                                        <th>Alamat</th>
-                                        <th>Kelas</th>
                                         <th>Mapel</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($siswa as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->jenis_kelamin }}</td>
-                                            <td>{{ $item->alamat }}</td>
-                                            <td>{{ $item->kelas_id }}</td>
-                                            <td>{{ $item->mapel_id }}</td>
-                                            <td>
-                                                <button onclick="editData()" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
-                                                <a href="#" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
                             </Table>
                         </div>
                     </div>
@@ -70,16 +51,120 @@
         @includeIf('siswa.form')
 @endsection
 
+
 @push('script')
 <script>
+
+    let table;
+
+    $(function() {
+        table = $('.table').DataTable( {
+            proccesing : true,
+            autowitdh: false,
+            ajax: {
+                url: '{{route('guru.data') }}'
+            },
+            columns : [
+                {data: 'DT_RowIndex'},
+                {data: 'nama'},
+                {data: 'jenis_kelamin'},
+                {data: 'mapel_id'},
+                {data: 'aksi'}
+            ]
+        });
+    })
+
+    $('#modalForm').on('submit', function(e){
+        if(! e.preventDefault()){
+            $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
+            .done((response) => {
+                $('#modalForm').modal('hide');
+                $('#modalForm form')[0].reset();
+                table.ajax.reload();
+                // Menambahkan Alert Ketceh Dari iziToast
+                iziToast.success({
+                    title: 'Sukses Dek',
+                    message: 'Data Berhasil Di-Simpan Dek',
+                    position: 'topRight'
+                })
+            })
+            .fail((errors) => {
+                iziToast.error({
+                    title: 'Gagal Dek',
+                    message: 'Data Gagal Di-Simpan Dek',
+                    position: 'topRight'
+                })
+                return;
+            })
+        }
+    })
+
     function addForm(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Tambah Data Siswa');
+        $('#modalForm .modal-title').text('Tambah Data Guru');
+        // Reset Search Dengan Tidak Reload
+        $('#modalForm form')[0].reset(); 
+
+        $('#modalForm form').attr('action', url);
+        $('#modalForm [name=_method]').val('post');
+        // Merubah Tanpa Nge-Reload
+        table.ajax.reload();
     }
 
     function editData(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Edit Data Siswa');
+        $('#modalForm .modal-title').text('Edit Data Guru');
+
+        // Mereset Setelah Memencet Submit
+        $('#modalForm form')[0].reset();
+        $('#modalForm form').attr('action', url);
+        $('#modalForm [name=_method').val('put');
+
+        $.get(url)
+        .done((response) => {
+            $('#modalForm [name=nama]').val(response.nama);
+        })
+        .fail((errors) => {
+            alert('Tidak Dapat Menampilkan Data');
+            return;
+        })
     }
+
+    function deleteData(url) {
+        // Menambahkan Alert Seperti Di Web Side SweetAlert 
+        swal({
+            title: "Yakin Dek Ingin Hapus?",
+            text: "Jika Adek Klik Oke! Maka Data Akan Terhapus",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                $.post(url, {
+                    '_token' : $('[name = csrf-token]').attr('content'),
+                    '_method' : 'delete'
+            })            
+            .done((response) => {
+                swal({
+                    title: "Sukses Dek!",
+                    text: "Data Berhasil Dihapus",
+                    icon: "success",
+                });
+                    return;
+            })
+            .fail((errors) => {
+                swal({
+                    title: "Gagal Dek!",
+                    text: "Data Gagal Dihapus",
+                    icon: "error",
+                });
+                    return;
+            });
+
+            table.ajax.reload();
+        }
+    });
+}
 </script>
 @endpush

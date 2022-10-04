@@ -27,7 +27,10 @@ class GuruController extends Controller
         return datatables()
             ->of($guru)
             ->addIndexColumn()
-            ->addColumn('aksi', function($guru){
+            ->addColumn('mapel_id', function($guru){
+                return $guru->mapel->nama;
+            })
+            ->editColumn('aksi', function($guru){
                 return '
                 <div class="btn-group">
                 <button onclick="editData(`'. route('guru.update', $guru->id) .'`)" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
@@ -58,7 +61,9 @@ class GuruController extends Controller
     {
         {
             $validator = Validator::make ($request->all(), [
-                'nama' => 'required'
+                'nama' => 'required',
+                'jenis_kelamin' => 'required',
+                'mapel_id' => 'required'
             ]);
     
             if($validator->fails()){
@@ -66,7 +71,9 @@ class GuruController extends Controller
             }
     
             $guru = Guru::create([
-                'nama' => $request->nama
+                'nama' => $request->nama,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'mapel_id' => $request->mapel_id
             ]);
     
             return response()->json([
@@ -111,6 +118,8 @@ class GuruController extends Controller
     {
         $guru = Guru::find($id);
         $guru->nama = $request->nama;
+        $guru->jenis_kelamin = $request->jenis_kelamin;
+        $guru->mapel_id = $request->mapel_id;
         $guru->update();
 
         return response()->json('Data Berhasil Disimpan');
