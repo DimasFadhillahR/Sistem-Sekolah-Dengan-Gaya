@@ -23,7 +23,6 @@
         </section> 
 
         <section class="content">
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Data Guru</h3>
@@ -45,20 +44,6 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($guru as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->jenis_kelamin}}</td>
-                                            <td>{{ $item->mapel_id }}</td>
-                                            <td>
-                                                <button onclick="editData()" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
-                                                <a href="#" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
                             </Table>
                         </div>
                     </div>
@@ -70,12 +55,12 @@
 <script>
     function addForm(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Tambah Data Guru');
+        $('#modalForm .modal-title').text('Tambah Data Siswa');
     }
 
     function editData(url){
         $('#modalForm').modal('show');
-        $('#modalForm .modal-title').text('Edit Data Guru');
+        $('#modalForm .modal-title').text('Edit Data Siswa');
     }
 </script>
 @endpush

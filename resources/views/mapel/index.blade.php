@@ -35,7 +35,7 @@
                         </div>
 
                         <div class="card-body">
-                            <Table class="table table-hover-text-nowrap">
+                            <table class="table table-hover-text-nowrap" style=>
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -43,19 +43,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($mapel as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>
-                                                <button onclick="editData('{{ route('mapel.update', $item->id) }}')" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
-                                                <button onclick="deleteData('{{ route('mapel.destroy', $item->id) }}')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </Table>
+                            </table>
                         </div>
                     </div>
         </section> 
@@ -75,8 +63,9 @@
                 url: '{{route('mapel.data') }}'
             },
             columns : [
-                (data: 'DT_RowIndex'),
-                (data: 'nama'),
+                {data: 'DT_RowIndex'},
+                {data: 'nama'},
+                {data: 'aksi'}
             ]
         });
     })
@@ -86,10 +75,21 @@
             $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
             .done((response) => {
                 $('#modalForm').modal('hide');
-                table.ajax.reloads();
+                $('#modalForm form')[0].reset();
+                table.ajax.reload();
+                // Menambahkan Alert Ketceh Dari iziToast
+                iziToast.success({
+                    title: 'Sukses Dek',
+                    message: 'Data Berhasil Di-Simpan Dek',
+                    position: 'topRight'
+                })
             })
             .fail((errors) => {
-                alert('Tidak Dapat Menyimpan Data');
+                iziToast.error({
+                    title: 'Gagal Dek',
+                    message: 'Data Gagal Di-Simpan Dek',
+                    position: 'topRight'
+                })
                 return;
             })
         }
@@ -98,15 +98,20 @@
     function addForm(url){
         $('#modalForm').modal('show');
         $('#modalForm .modal-title').text('Tambah Data Mapel');
+        // Reset Search Dengan Tidak Reload
+        $('#modalForm form')[0].reset(); 
 
-        $('#mapelForm form').attr('action', url);
+        $('#modalForm form').attr('action', url);
         $('#modalForm [name=_method]').val('post');
+        // Merubah Tanpa Nge-Reload
+        table.ajax.reload();
     }
 
     function editData(url){
         $('#modalForm').modal('show');
         $('#modalForm .modal-title').text('Edit Data Mapel');
 
+        // Mereset Setelah Memencet Submit
         $('#modalForm form')[0].reset();
         $('#modalForm form').attr('action', url);
         $('#modalForm [name=_method').val('put');
@@ -122,20 +127,40 @@
     }
 
     function deleteData(url) {
-        if(confirm('Yakin Akan Menghapus Data ?')) {
-            $.post(url, {
-                '_token' : $('[name = csrf-token]').attr('content'),
-                '_method' : 'delete'
+        // Menambahkan Alert Seperti Di Web Side SweetAlert 
+        swal({
+            title: "Yakin Dek Ingin Hapus?",
+            text: "Jika Adek Klik Oke! Maka Data Akan Terhapus",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
             })
+            .then((willDelete) => {
+            if (willDelete) {
+                $.post(url, {
+                    '_token' : $('[name = csrf-token]').attr('content'),
+                    '_method' : 'delete'
+            })            
             .done((response) => {
-                alert('Data Berhasil Di Hapus');
-                return;
+                swal({
+                    title: "Sukses Dek!",
+                    text: "Data Berhasil Dihapus",
+                    icon: "success",
+                });
+                    return;
             })
             .fail((errors) => {
-                alert('Data Gagal Di Hapus!');
-                return;
-            })
+                swal({
+                    title: "Gagal Dek!",
+                    text: "Data Gagal Dihapus",
+                    icon: "error",
+                });
+                    return;
+            });
+
+            table.ajax.reload();
         }
-    }
+    });
+}
 </script>
 @endpush

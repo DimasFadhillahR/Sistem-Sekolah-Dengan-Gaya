@@ -20,7 +20,7 @@
 
                         <li class="nav-header">Dashboard</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{ request()->is('dashboard*') ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -31,7 +31,7 @@
                         <li class="nav-header">Master</li>
 
                         <li class="nav-item">
-                            <a href="{{ route ('guru.index') }}" class="nav-link">
+                            <a href="{{ route ('guru.index') }}" class="nav-link {{ request()->is('guru*') ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-user-secret"></i>
                                 <p>
                                     Guru
@@ -40,7 +40,7 @@
                         </li>
 
                         <li class="nav-item">
-                        <a href="{{ route ('kelas.index') }}" class="nav-link">
+                        <a href="{{ route ('kelas.index') }}" class="nav-link {{ request()->is('kelas*') ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-chalkboard-teacher"></i>
                                 <p>
                                     Kelas
@@ -49,7 +49,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route ('mapel.index') }}" class="nav-link">
+                            <a href="{{ route ('mapel.index') }}" class="nav-link {{ request()->is('mapel*') ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>
                                     Mapel
@@ -58,7 +58,7 @@
                         </li>
 
                         <li class="nav-item">
-                        <a href="{{ route ('siswa.index') }}" class="nav-link"> 
+                        <a href="{{ route ('siswa.index') }}" class="nav-link {{ request()->is('siswa*') ? 'active' : ''}}"> 
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Siswa

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\guru;
+use App\Models\Guru;
+use App\Models\Mapel;
+use Validator;
 use Illuminate\Http\Request;
 
 class GuruController extends Controller
@@ -15,9 +17,27 @@ class GuruController extends Controller
     public function index()
     {
         $guru = Guru::all();
-        return view('guru.index', compact('guru'));
+        $mapel = Mapel::all();
+        return view('guru.index', compact('guru', 'mapel'));
     }
 
+    public function data(){
+        $guru = Guru::orderBy('id', 'asc')->get();
+        
+        return datatables()
+            ->of($guru)
+            ->addIndexColumn()
+            ->addColumn('aksi', function($guru){
+                return '
+                <div class="btn-group">
+                <button onclick="editData(`'. route('guru.update', $guru->id) .'`)" class="btn btn-flat btn-sm btn-warning"><i class="fa fa-edit"></i></button>
+                <button onclick="deleteData(`'.route('guru.destroy', $guru->id) .'`)" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                </div>
+                ';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -36,27 +56,46 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        {
+            $validator = Validator::make ($request->all(), [
+                'nama' => 'required'
+            ]);
+    
+            if($validator->fails()){
+                return response()->json($validator->errors(), 422);
+            }
+    
+            $guru = Guru::create([
+                'nama' => $request->nama
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Berhasil Disimpan',
+                'data' => $guru
+            ]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\guru  $guru
+     * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function show(guru $guru)
+    public function show($id)
     {
-        //
+        $guru = Guru::find($id);
+        return response()->json($guru);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\guru  $guru
+     * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function edit(guru $guru)
+    public function edit(Guru $guru)
     {
         //
     }
@@ -65,22 +104,29 @@ class GuruController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\guru  $guru
+     * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, guru $guru)
+    public function update(Request $request, $id)
     {
-        //
+        $guru = Guru::find($id);
+        $guru->nama = $request->nama;
+        $guru->update();
+
+        return response()->json('Data Berhasil Disimpan');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\guru  $guru
+     * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function destroy(guru $guru)
+    public function destroy($id)
     {
-        //
+        $guru = Guru::find($id);
+        $guru -> delete();
+ 
+        return response()->json(null, 204);
     }
 }

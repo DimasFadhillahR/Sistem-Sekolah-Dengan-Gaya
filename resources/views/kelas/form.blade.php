@@ -9,10 +9,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>One fine body…</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <form action="" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group">
+                        <label for="nama">Nama Kelas</label>
+                        <input type="text" autocomplete="off" class="form-control" name="nama" id="nama">
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-flat
+                     btn-sm">Simpan</button>
+                </form>
             </div>
         </div>
 
